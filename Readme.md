@@ -15,3 +15,5 @@ Usefull Links:
     https://github.com/isaac879/RGB-Time-Fountain/blob/add-license-1/time_fountain_code_arduino_uno.ino
   - Arduino Music Visualizer
     https://lifehacker.com/build-an-arduino-powered-music-visualizer-1738047396
+  - How to wire motor for PWM control (needed for pump)
+    https://www.arduino.cc/en/Tutorial/TransistorMotorControl
