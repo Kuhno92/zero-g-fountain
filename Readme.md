@@ -17,3 +17,7 @@ Usefull Links:
     https://lifehacker.com/build-an-arduino-powered-music-visualizer-1738047396
   - How to wire motor for PWM control (needed for pump)
     https://www.arduino.cc/en/Tutorial/TransistorMotorControl
+  - Infos about motor control
+    https://tronixlabs.com.au/news/tutorial-l298n-dual-motor-controller-module-2a-and-arduino
+  - Library for controlling motor with L298N Driver
+    https://github.com/AlonsoLP/Arduino-L298N-Library
