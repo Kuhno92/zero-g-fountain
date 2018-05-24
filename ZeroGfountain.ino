@@ -407,8 +407,32 @@ void parseWsCommands(uint8_t *payload){
   if( command == "RGB" ) {Mode = 3; }
   if( command == "Music Visualizer" ) {Mode = 4; currentSensorConfig1 = -1;}
   if( command == "No Light" ) {Mode = 5; currentSensorConfig1 = -1;}
-  //if(getValue(command, ':', 0) == "modeConfig1" ) {sensorConfigurationRouter(getValue(command, ':', 1).toInt()); }
+  if(getValue(command, ':', 0).startsWith("modeConfig")) {modeConfigurationRouter(command); }
   if(modeActive == "modeActive"){}
+}
+//===============================================================
+// Sets configuration variables for the specific mode
+//===============================================================
+void modeConfigurationRouter(String command){
+  int conf = getValue(command, ':', 1).toInt();
+  switch (Mode) {
+    case 0:
+      break;
+    case 1:
+      break;
+    case 2:
+      if(getValue(command, ':', 0) == "modeConfig1"){ /*Brighness*/ }
+      if(getValue(command, ':', 0) == "modeConfig2"){ /*Frequency*/ setBaseStrobeFrequency(conf); }
+      break;
+    case 3:
+      break;
+    case 4:
+      break;
+    case 5:
+      break;
+    default:
+      break;
+  }
 }
 
 //************************************* fountainOn Functions ***************************************************
@@ -488,4 +512,22 @@ bool loadFromSpiffs(String path){
   dataFile.close();
   return true;
 }
-
+void setBaseStrobeFrequency(unsigned int targetFreq){
+    if(targetFreq < 0 || targetFreq > 65535){
+        Serial.print("(\"ERROR: loop count out of range (0-65,535)... value entered: "+ (long)targetFreq);
+    }
+    else{
+        flag_ms_start = true;
+        int diff = targetFreq - base_loop_count;
+        base_loop_count = targetFreq;
+        base_loop_count_temp = base_loop_count * 0.00277777777777777777777;
+        
+        red_max_count += diff;
+        red_duty_value = (float)red_max_count * red_duty / 100.0;
+        green_max_count += diff;
+        green_duty_value = (float)green_max_count * green_duty / 100.0;
+        blue_max_count += diff;
+        blue_duty_value = (float)blue_max_count * blue_duty / 100.0;
+        if(debug)Serial.print("Loop count set to: " + base_loop_count);
+    }
+}

@@ -65,11 +65,11 @@ const char SITE_index[] PROGMEM = R"=====(
           <label for="flip-2" style="width: auto"><h4 style="-webkit-margin-before: 0px;">Activate:</h4></label>
           <select name="flip-2" class="modeActiveButton" data-role="flipswitch" data-mini="true" data-theme="b"><option value="modeInactive">OFF</option><option value="modeActive">ON</option></select>
         </div>
-        <div id="BrightnessSlider" class="ui-slider-slider" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
+        <div id="BrightnessSlider" class="ui-slider-slider modeConfig1" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
           <label style="font-size: 130%;">Brightness(%) :</label>
           <input class="SensorConfigSlider1" id="Brightness" type="range" min="0" max="100" value="50" data-theme="a" data-track-theme="b" />
         </div>
-        <div id="FrequencySlider" class="ui-slider-slider" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
+        <div id="FrequencySlider" class="ui-slider-slider modeConfig2" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
           <label style="font-size: 130%;">Frequency(Hz) :</label>
           <input class="SensorConfigSlider2" id="Frequency" type="range" min="1" max="200" value="50" data-theme="a" data-track-theme="b" />
         </div>
@@ -201,9 +201,16 @@ const char SITE_index[] PROGMEM = R"=====(
       connection.send(e.target.value)
     });
 
-    //Sensor Configuration Slider
-    $( ".ui-slider-slider" ).on( "slidestop", function( event, ui ) {
+    //Mode Configuration Slider 1
+    $( ".modeConfig1" ).on( "slidestop", function( event, ui ) {
       connection.send("modeConfig1:"+ event.target.value);
+    } );
+    //Mode Configuration Slider 2
+    $( ".modeConfig2" ).on( "slidestop", function( event, ui ) {
+      var x = event.target.value;
+      //Exponential fitted curve of frequency / base_loop_count behaviour
+      var calc = 31 + 1900 * Math.exp(-0.033*x);
+      connection.send("modeConfig2:"+ calc);
     } );
 
     //Websocket
