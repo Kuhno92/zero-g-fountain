@@ -251,13 +251,31 @@ void loop() {
 //************************************* Timer Callbackk (1HZ) **********************************
 void timerCallback(void *pArg) { 
     TickOccured = true;
-    webSocket.sendTXT(0, "{\"uptime\": \"" + uptime + "\", \"ip\": \"" + ipadress + " \", " + "\"data\": {\"Mode\": " + Mode + ", \"modevalue\": "+ currentHz + ", \"unit\": \"Hz\", \"modeActive\": \""+modeActive+"\",\"modeConfig1\": \""+(-1) +"\" }}");
-    /*Serial.println();
-    Serial.println("Tick Occurred");
-    Serial.print("Millis: "); Serial.println(millis());
-    Serial.print("Counter: "); Serial.println(Counter);*/
+    modeUiCommunication();
     *((int *) pArg) += 1;
 } 
+void modeUiCommunication() {
+  switch(Mode){
+    case 0:
+      webSocket.sendTXT(0, "{\"uptime\": \"" + uptime + "\", \"ip\": \"" + ipadress + " \", " + "\"data\": {\"Mode\": " + Mode + ", \"modeActive\": \""+modeActive+"\",\"modeConfig1\": \""+(-1) +"\" }}");
+      break;
+    case 1:
+      webSocket.sendTXT(0, "{\"uptime\": \"" + uptime + "\", \"ip\": \"" + ipadress + " \", " + "\"data\": {\"Mode\": " + Mode + ", \"modeActive\": \""+modeActive+"\",\"modeConfig1\": \""+(-1) +"\" }}");
+      break;
+    case 2:
+      webSocket.sendTXT(0, "{\"uptime\": \"" + uptime + "\", \"ip\": \"" + ipadress + " \", " + "\"data\": {\"Mode\": " + Mode + ", \"modevalue\": "+ currentHz + ", \"unit\": \"Hz\", \"modeActive\": \""+modeActive+"\",\"modeConfig1\": \""+(-1) +"\" }}");
+      break;
+    case 3:
+      webSocket.sendTXT(0, "{\"uptime\": \"" + uptime + "\", \"ip\": \"" + ipadress + " \", " + "\"data\": {\"Mode\": " + Mode + ", \"modeActive\": \""+modeActive+"\",\"modeConfig1\": \""+(-1) +"\" }}");
+      break;
+    case 4:
+      webSocket.sendTXT(0, "{\"uptime\": \"" + uptime + "\", \"ip\": \"" + ipadress + " \", " + "\"data\": {\"Mode\": " + Mode + ", \"modeActive\": \""+modeActive+"\",\"modeConfig1\": \""+(-1) +"\" }}");
+      break;
+    case 5:
+      webSocket.sendTXT(0, "{\"uptime\": \"" + uptime + "\", \"ip\": \"" + ipadress + " \", " + "\"data\": {\"Mode\": " + Mode + ", \"modeActive\": \""+modeActive+"\",\"modeConfig1\": \""+(-1) +"\" }}");
+      break;
+  }
+}
 //**************************************INITIALIZATION FUNCTIONS (SETUP)************************
 //===============================================================
 // Wifi Initialization
@@ -375,12 +393,22 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t msglen
 
 //************************************* WS commands Routing ***************************************************
 //===============================================================
-// Parse Websocket commands
+// Parse Websocket commands 
 //===============================================================
 void parseWsCommands(uint8_t *payload){
   String command = String((char *)payload);
   if( command == "ON" ) {fountainOn(); }
   if( command == "OFF" ) {fountainOff(); }
+  if( command == "modeActive" ) {modeActive = "modeActive";}
+  if( command == "modeInactive" ) {modeActive = "modeInactive"; }
+  if( command == "Off" ) {Mode =  0; currentSensorConfig1 = -1;} 
+  if( command == "Light On" ) {Mode = 1;}
+  if( command == "Zero-G Standard" ) {Mode = 2;}
+  if( command == "RGB" ) {Mode = 3; }
+  if( command == "Music Visualizer" ) {Mode = 4; currentSensorConfig1 = -1;}
+  if( command == "No Light" ) {Mode = 5; currentSensorConfig1 = -1;}
+  //if(getValue(command, ':', 0) == "modeConfig1" ) {sensorConfigurationRouter(getValue(command, ':', 1).toInt()); }
+  if(modeActive == "modeActive"){}
 }
 
 //************************************* fountainOn Functions ***************************************************
