@@ -58,7 +58,7 @@ String ipadress ;
 #define OFF false
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------*/
 //Global variables
-unsigned int base_loop_count = 400; // 20 = 200hz | 50 = 166hz| 400 = 50hz | 500 = 40hz | 1000 = 20 hz
+unsigned int base_loop_count = 400; // 20 = 200hz | 50 = 166hz| 400 = 50hz | 500 = 40hz | 1000 = 20 hz | 5000 = 4,2 hz | 10000 = 2,2 hz | 20000 = 1,2 hz | 22000 = 1 hz 
 
 unsigned int phase_offset = 10;
 
@@ -194,16 +194,16 @@ void loop() {
 
     if(base_count >= base_loop_count){
         base_count = 0;
-        if(flag_ms_stop && debug){
+        if(flag_ms_stop){
             ms = millis() - ms;
             flag_ms_stop = false;
             flag_ms_start = true;
             currentHz = 1/((float)ms/1000.0);
-            Serial.print("Estimated frequency: ");
-            Serial.print(currentHz, 3);
-            Serial.print("Hz\n");
+            if(debug)Serial.print("Estimated frequency: ");
+            if(debug)Serial.print(currentHz, 3);
+            if(debug)Serial.print("Hz\n");
         }
-        if(flag_ms_start && debug){
+        if(flag_ms_start){
             ms = millis();
             flag_ms_stop = true;
         }
@@ -288,7 +288,7 @@ void startWiFi() { // Start a Wi-Fi access point, and try to connect to some giv
   Serial.print(ssid);
   Serial.println("\" started\r\n");
 
-  wifiMulti.addAP("DontTouchThis", "PASSWORD");   // add Wi-Fi networks you want to connect to
+  wifiMulti.addAP("DontTouchThis", "!No3nTrY!1234567890");   // add Wi-Fi networks you want to connect to
   wifiMulti.addAP("teco5g", "password");
   wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
 
@@ -414,7 +414,7 @@ void parseWsCommands(uint8_t *payload){
 // Sets configuration variables for the specific mode
 //===============================================================
 void modeConfigurationRouter(String command){
-  int conf = getValue(command, ':', 1).toInt();
+  float conf = getValue(command, ':', 1).toFloat();
   switch (Mode) {
     case 0:
       break;
@@ -422,7 +422,7 @@ void modeConfigurationRouter(String command){
       break;
     case 2:
       if(getValue(command, ':', 0) == "modeConfig1"){ /*Brighness*/ }
-      if(getValue(command, ':', 0) == "modeConfig2"){ /*Frequency*/ setBaseStrobeFrequency(conf); }
+      if(getValue(command, ':', 0) == "modeConfig2"){ /*Frequency*/setBaseStrobeFrequency(conf*base_loop_count); }
       break;
     case 3:
       break;

@@ -69,10 +69,17 @@ const char SITE_index[] PROGMEM = R"=====(
           <label style="font-size: 130%;">Brightness(%) :</label>
           <input class="SensorConfigSlider1" id="Brightness" type="range" min="0" max="100" value="50" data-theme="a" data-track-theme="b" />
         </div>
-        <div id="FrequencySlider" class="ui-slider-slider modeConfig2" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
-          <label style="font-size: 130%;">Frequency(Hz) :</label>
-          <input class="SensorConfigSlider2" id="Frequency" type="range" min="1" max="200" value="50" data-theme="a" data-track-theme="b" />
+        <br>
+        <label align="center" style="font-size: 130%; text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;">Frequency(Hz) :</label>
+        <div data-role="controlgroup" data-type="horizontal" align="center" class="modeConfig2">
+          <button type="button" data-role="button" data-icon="arrow-d-l" data-iconpos="top" value="2">x0.5</button>
+          <button type="button" data-role="button" data-icon="arrow-d" data-iconpos="top" value="1.2">x0.8</button>
+          <button type="button" data-role="button" data-icon="carat-d" data-iconpos="top"" value="1.01">x0.99</button>
+          <button type="button" data-role="button" data-icon="carat-u" data-iconpos="top" value="0.99">x1.01</button>
+          <button type="button" data-role="button" data-icon="arrow-u" data-iconpos="top" value="0.8">x1.2</button>
+          <button type="button" data-role="button" data-icon="arrow-u-r" data-iconpos="top" value="0.5">x2</button>
         </div>
+
         <h4>Meassurement:</h4>
         <textarea name="textarea" disabled id="textarea-a" cols="1" rows="1" style="color: #FFFFFF; opacity: 0.8; padding-left: -100px;">
           Calculating Frequency ...
@@ -91,7 +98,7 @@ const char SITE_index[] PROGMEM = R"=====(
           <label for="flip-2" style="width: auto"><h4 style="-webkit-margin-before: 0px;">Activate:</h4></label>
           <select name="flip-2" class="modeActiveButton" data-role="flipswitch" data-mini="true" data-theme="b"><option value="modeInactive">OFF</option><option value="modeActive">ON</option></select>
         </div>
-        <div id="BrightnessSlider" class="ui-slider-slider" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
+        <div id="BrightnessSlider" class="ui-slider-slider" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;"> 
           <label style="font-size: 130%;">Update Speed :</label>
           <input class="SensorConfigSlider1" id="Temperature" type="range" min="0" max="100" value="50" data-theme="a" data-track-theme="b" />
         </div>
@@ -207,11 +214,12 @@ const char SITE_index[] PROGMEM = R"=====(
     } );
     //Mode Configuration Slider 2
     $( ".modeConfig2" ).on( "slidestop", function( event, ui ) {
-      var x = event.target.value;
-      //Exponential fitted curve of frequency / base_loop_count behaviour
-      var calc = 31 + 1900 * Math.exp(-0.033*x);
-      connection.send("modeConfig2:"+ calc);
+      connection.send("modeConfig2:"+ event.target.value);
     } );
+    //Mode Configuration 2 Button
+    $('.modeConfig2').click(function() {
+    connection.send("modeConfig2:"+ event.target.value);
+  });
 
     //Websocket
     var connection = new WebSocket('ws://' + location.host + ':81/', ['arduino']);
