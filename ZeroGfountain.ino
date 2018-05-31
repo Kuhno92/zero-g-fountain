@@ -421,8 +421,8 @@ void modeConfigurationRouter(String command){
     case 1:
       break;
     case 2:
-      if(getValue(command, ':', 0) == "modeConfig1"){ /*Brighness*/ }
-      if(getValue(command, ':', 0) == "modeConfig2"){ /*Frequency*/setBaseStrobeFrequency(conf*base_loop_count); }
+      if(getValue(command, ':', 0) == "modeConfig1"){ /*Brighness*/ FastLED.setBrightness(conf);}
+      if(getValue(command, ':', 0) == "modeConfig2"){ /*Frequency*/ setBaseStrobeFrequency(conf*base_loop_count); }
       break;
     case 3:
       break;

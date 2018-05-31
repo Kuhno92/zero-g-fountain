@@ -56,7 +56,7 @@ const char SITE_index[] PROGMEM = R"=====(
         </div>
         <div id="BrightnessSlider" class="ui-slider-slider" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
           <label style="font-size: 130%;">Brightness :</label>
-          <input class="SensorConfigSlider1" id="Temperature" type="range" min="0" max="100" value="50" data-theme="a" data-track-theme="b" />
+          <input class="SensorConfigSlider1" id="Temperature" type="range" min="0" max="255" value="255" data-theme="a" data-track-theme="b" />
         </div>
       </div>
 
@@ -67,7 +67,7 @@ const char SITE_index[] PROGMEM = R"=====(
         </div>
         <div id="BrightnessSlider" class="ui-slider-slider modeConfig1" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
           <label style="font-size: 130%;">Brightness(%) :</label>
-          <input class="SensorConfigSlider1" id="Brightness" type="range" min="0" max="100" value="50" data-theme="a" data-track-theme="b" />
+          <input class="SensorConfigSlider1" id="Brightness" type="range" min="0" max="255" value="255" data-theme="a" data-track-theme="b" />
         </div>
         <br>
         <label align="center" style="font-size: 130%; text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;">Frequency(Hz) :</label>
@@ -100,7 +100,7 @@ const char SITE_index[] PROGMEM = R"=====(
         </div>
         <div id="BrightnessSlider" class="ui-slider-slider" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;"> 
           <label style="font-size: 130%;">Update Speed :</label>
-          <input class="SensorConfigSlider1" id="Temperature" type="range" min="0" max="100" value="50" data-theme="a" data-track-theme="b" />
+          <input class="SensorConfigSlider1" id="Temperature" type="range" min="0" max="255" value="255" data-theme="a" data-track-theme="b" />
         </div>
       </div>
       
