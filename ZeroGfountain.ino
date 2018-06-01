@@ -15,13 +15,16 @@ extern "C" {
 }
 
 //************************************* VARIABLE DECLARATION **************************************
-bool debug = true;
+bool debug = false;
 
 const char* htmlfile = "/index.html";
 
 // FastLED definitions (WS2812b)
 #define FASTLED_ESP8266_NODEMCU_PIN_ORDER
 #define DATA_PIN 4 // Pin for ws2812
+#define PUMP_IN1 D6
+#define PUMP_IN2 D7
+#define PUMP_ENA D8
 #define NUM_LEDS 40
 CRGB leds[NUM_LEDS];
 
@@ -49,7 +52,7 @@ String ipadress ;
 
 #define MAX_STRING_LENGTH 10
 
-#define PUMP_MAX_COUNT 255
+#define PUMP_MAX_COUNT 1023
 
 #define POSITIVE 1
 #define NEGATIVE -1
@@ -116,6 +119,16 @@ void setup() {
   // Start Serial
   Serial.begin(9600);
   
+  //
+  pinMode(PUMP_IN1, OUTPUT);
+  pinMode(PUMP_IN2, OUTPUT);
+  pinMode(PUMP_ENA, OUTPUT);
+  flag_pump_off = false;
+  pump_duty_value = 0;
+  digitalWrite(PUMP_IN1, HIGH);
+  digitalWrite(PUMP_IN2, LOW);
+  analogWrite(PUMP_ENA, pump_duty_value);
+  
   //Initialize File System
   SPIFFS.begin();
   Serial.println("File System Initialized");
@@ -178,13 +191,14 @@ void loop() {
       Gtemp = G;
       Btemp = B;
     }
+    /* //Not needed because of L298H driver but commentet for the sake of completeness
     if(pump_count == pump_duty_value){
         //PORTD &= ~_BV(PUMP_PIN);  //write port B5 LOW
     }
     else if(pump_count >= PUMP_MAX_COUNT && !flag_pump_off){
         //PORTD |= _BV(PUMP_PIN);  //write port B5 HIGH
         pump_count = 0;
-    }
+    }*/
 
     base_count++;//Increment counts  
     red_count++;
@@ -423,6 +437,7 @@ void modeConfigurationRouter(String command){
     case 2:
       if(getValue(command, ':', 0) == "modeConfig1"){ /*Brighness*/ FastLED.setBrightness(conf);}
       if(getValue(command, ':', 0) == "modeConfig2"){ /*Frequency*/ setBaseStrobeFrequency(conf*base_loop_count); }
+      if(getValue(command, ':', 0) == "modeConfig3"){ /*Frequency*/ setPumpPWM((int)conf); }
       break;
     case 3:
       break;
@@ -530,4 +545,20 @@ void setBaseStrobeFrequency(unsigned int targetFreq){
         blue_duty_value = (float)blue_max_count * blue_duty / 100.0;
         if(debug)Serial.print("Loop count set to: " + base_loop_count);
     }
+}
+
+void setPumpPWM(int PWM){
+    if(PWM > PUMP_MAX_COUNT || PWM < 0){
+        Serial.print("ERROR: PWM out of range (0-1023)... PWM value entered = ");
+        Serial.println(PWM);
+    }
+    else{
+        flag_pump_off = false;
+        pump_duty_value = PWM;
+        float percentage = float(PWM) / 10.23;
+        analogWrite(PUMP_ENA, pump_duty_value);
+        Serial.print("Pump duty cycle set to: ");
+        Serial.print(percentage);
+        Serial.println(" %");
+    }  
 }

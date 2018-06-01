@@ -69,6 +69,10 @@ const char SITE_index[] PROGMEM = R"=====(
           <label style="font-size: 130%;">Brightness(%) :</label>
           <input class="SensorConfigSlider1" id="Brightness" type="range" min="0" max="255" value="255" data-theme="a" data-track-theme="b" />
         </div>
+        <div id="PumpPwmSlider" class="ui-slider-slider modeConfig3" style="text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;""> 
+          <label style="font-size: 130%;">Pump PWM :</label>
+          <input class="SensorConfigSlider1" id="PumpPWM" type="range" min="0" max="1023" value="0" data-theme="a" data-track-theme="b" />
+        </div>
         <br>
         <label align="center" style="font-size: 130%; text-align: center; color:white; text-shadow: black 0.1em 0.1em 0.2em;">Frequency(Hz) :</label>
         <div data-role="controlgroup" data-type="horizontal" align="center" class="modeConfig2">
@@ -215,6 +219,10 @@ const char SITE_index[] PROGMEM = R"=====(
     //Mode Configuration Slider 2
     $( ".modeConfig2" ).on( "slidestop", function( event, ui ) {
       connection.send("modeConfig2:"+ event.target.value);
+    } );
+    //Mode Configuration Slider 3
+    $( ".modeConfig3" ).on( "slidestop", function( event, ui ) {
+      connection.send("modeConfig3:"+ event.target.value);
     } );
     //Mode Configuration 2 Button
     $('.modeConfig2').click(function() {
